@@ -9,15 +9,12 @@ def get_data():
 
 @timer
 def part1(data):
-    return sum(x2 > x1 for x1, x2 in zip(data, data[1:]))
+    return len([None for x1, x2 in zip(data, data[1:]) if x2 > x1])
 
 
 @timer
 def part2(data):
-    return sum(
-        sum((x, y, z)) < sum((y, z, w))
-        for x, y, z, w in zip(data, data[1:], data[2:], data[3:])
-    )
+    return len([None for x, y in zip(data, data[3:]) if y > x])
 
 
 def main():
