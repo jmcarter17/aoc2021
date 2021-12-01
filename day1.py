@@ -7,14 +7,18 @@ def get_data():
         return [int(x) for x in f]
 
 
+def len_increasing(r1, r2):
+    return len([None for x, y in zip(r1, r2) if y > x])
+
+
 @timer
 def part1(data):
-    return len([None for x1, x2 in zip(data, data[1:]) if x2 > x1])
+    return len_increasing(data, data[1:])
 
 
 @timer
 def part2(data):
-    return len([None for x, y in zip(data, data[3:]) if y > x])
+    return len_increasing(data, data[3:])
 
 
 def main():
