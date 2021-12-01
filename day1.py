@@ -27,22 +27,5 @@ def main():
     print(part2(data))
 
 
-def test_get_data_benchmark(benchmark):
-    data = benchmark(get_data)
-    assert len(data)
-
-
-def test_part1_benchmark(benchmark):
-    data = get_data()
-    result = benchmark(part1, data)
-    assert result == 1527
-
-
-def test_part2_benchmark(benchmark):
-    data = get_data()
-    result = benchmark(part2, data)
-    assert result == 1575
-
-
 if __name__ == "__main__":
     main()
