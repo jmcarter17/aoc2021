@@ -1,6 +1,5 @@
 from itertools import accumulate
 import numpy as np
-from utils import timer
 
 DIRS = dict(zip("fdu", ((1, 0), (0, 1), (0, -1))))
 
@@ -21,8 +20,8 @@ def part1(data):
 
 def part2(data):
     return np.prod((
-        sum(x[0] for x in data),
-        sum(x[0] * y for (x, y) in zip(data, accumulate(x[1] for x in data)))
+        sum(x for (x, _) in data),
+        sum(x * aim for ((x, _), aim) in zip(data, accumulate(y for (_, y) in data)))
     ))
 
 
