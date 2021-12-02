@@ -1,12 +1,14 @@
 from itertools import accumulate
-import numpy as np
+from math import prod
 
 DIRS = dict(zip("fdu", ((1, 0), (0, 1), (0, -1))))
 
 
 def parse_row(row):
-    d, x = row.split()
-    return np.array(DIRS[d[0]]) * int(x)
+    d, scale = row.split()
+    d, scale = DIRS[d[0]], int(scale)
+    x, y = d
+    return x * scale, y * scale
 
 
 def get_data():
@@ -15,13 +17,16 @@ def get_data():
 
 
 def part1(data):
-    return np.prod(sum(data))
+    return prod((
+        sum(x for (x, _) in data),
+        sum(y for (_, y) in data)
+    ))
 
 
 def part2(data):
-    return np.prod((
+    return prod((
         sum(x for (x, _) in data),
-        sum(x * aim for ((x, _), aim) in zip(data, accumulate(y for (_, y) in data)))
+        sum(x[0] * aim for (x, aim) in zip(data, accumulate(y[1] for y in data))),
     ))
 
 
