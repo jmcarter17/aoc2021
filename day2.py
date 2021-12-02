@@ -12,14 +12,14 @@ def parse_row(row):
 
 
 def get_data():
-    data = ([], [])
+    xs, ys = [], []
     with open("inputs/day2.txt") as f:
         for row in f:
             x, y = parse_row(row)
-            data[0].append(x)
-            data[1].append(y)
+            xs.append(x)
+            ys.append(y)
 
-    return data
+    return xs, ys
 
 
 def part1(xs, ys):
