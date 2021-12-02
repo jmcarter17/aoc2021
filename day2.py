@@ -12,28 +12,31 @@ def parse_row(row):
 
 
 def get_data():
+    data = ([], [])
     with open("inputs/day2.txt") as f:
-        return [parse_row(x) for x in f]
+        for row in f:
+            x, y = parse_row(row)
+            data[0].append(x)
+            data[1].append(y)
+
+    return data
 
 
-def part1(data):
+def part1(xs, ys):
+    return prod((sum(xs), sum(ys)))
+
+
+def part2(xs, ys):
     return prod((
-        sum(x for (x, _) in data),
-        sum(y for (_, y) in data)
-    ))
-
-
-def part2(data):
-    return prod((
-        sum(x for (x, _) in data),
-        sum(x[0] * aim for (x, aim) in zip(data, accumulate(y[1] for y in data))),
+        sum(xs),
+        sum(x * aim for (x, aim) in zip(xs, accumulate(ys)))
     ))
 
 
 def main():
     data = get_data()
-    print(part1(data))
-    print(part2(data))
+    print(part1(*data))
+    print(part2(*data))
 
 
 if __name__ == "__main__":

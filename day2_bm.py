@@ -1,4 +1,4 @@
-from day1 import get_data, part1, part2, main
+from day2 import get_data, part1, part2, main
 
 
 def test_get_data_benchmark(benchmark):
@@ -7,15 +7,15 @@ def test_get_data_benchmark(benchmark):
 
 
 def test_part1_benchmark(benchmark):
-    data = get_data()
-    result = benchmark(part1, data)
-    assert result == 1527
+    xs, ys = get_data()
+    result = benchmark(part1, xs, ys)
+    assert result == 1480518
 
 
 def test_part2_benchmark(benchmark):
-    data = get_data()
-    result = benchmark(part2, data)
-    assert result == 1575
+    xs, ys = get_data()
+    result = benchmark(part2, xs, ys)
+    assert result == 1282809906
 
 
 def test_main_becnhmark(benchmark):
