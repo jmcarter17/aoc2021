@@ -29,7 +29,7 @@ def get_co2_rating(data):
 
 
 def part2(data):
-    return get_oxy_rating(data[:]) * get_co2_rating(data[:])
+    return get_oxy_rating(data) * get_co2_rating(data)
 
 
 def main():
