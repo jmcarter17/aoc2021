@@ -1,7 +1,3 @@
-from collections import Counter
-from math import prod
-
-
 def get_data():
     with open("inputs/day3.txt") as f:
         return [x.strip() for x in f]
@@ -13,32 +9,27 @@ def part1(data):
     return int(gamma, 2) * int(beta, 2)
 
 
-def get_oxy_rating(data):
-    idx = 0
-    while True:
+def get_rating(data, criteria_fn):
+    for idx in range(len(data[0])):
         bits = list(zip(*data))[idx]
-        counter = Counter(bits)
-        most_common = '0' if counter.get('1', 0) < counter.get('0', 0) else '1'
-        data = [x for x in data if x[idx] == most_common]
-        idx += 1
+        criteria = criteria_fn(bits)
+        data = [x for x in data if x[idx] == criteria]
         if len(data) == 1:
             return int(data[0], 2)
+
+
+def get_oxy_rating(data):
+    criteria_fn = lambda bits: '0' if bits.count('1') < bits.count('0') else '1'
+    return get_rating(data, criteria_fn)
 
 
 def get_co2_rating(data):
-    idx = 0
-    while True:
-        bits = list(zip(*data))[idx]
-        counter = Counter(bits)
-        least_common = '1' if counter.get('0', 0) > counter.get('1', 0) else '0'
-        data = [x for x in data if x[idx] == least_common]
-        idx += 1
-        if len(data) == 1:
-            return int(data[0], 2)
+    criteria_fn = lambda bits: '1' if bits.count('1') < bits.count('0') else '0'
+    return get_rating(data, criteria_fn)
 
 
 def part2(data):
-    return prod((get_oxy_rating(data[:]), get_co2_rating(data[:])))
+    return get_oxy_rating(data[:]) * get_co2_rating(data[:])
 
 
 def main():
