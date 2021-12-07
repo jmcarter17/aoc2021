@@ -1,3 +1,5 @@
+from collections import deque
+
 from utils import timer
 
 
@@ -8,9 +10,8 @@ def get_data():
 
 def reproduction(data, *, numdays):
     for _ in range(numdays):
-        reproducing = data.pop(0)
-        data.append(reproducing)
-        data[6] += reproducing
+        data.rotate(-1)
+        data[6] += data[-1]
 
     return data
 
@@ -28,9 +29,10 @@ def part2(fishlist):
 @timer
 def main():
     data = get_data()
-    fishlist = [data.count(i) for i in range(9)]
-    print(part1(fishlist[:]))
-    print(part2(fishlist[:]))
+    fishlist = deque([data.count(i) for i in range(9)])
+    print(fishlist)
+    print(part1(fishlist.copy()))
+    print(part2(fishlist.copy()))
 
 
 if __name__ == "__main__":
