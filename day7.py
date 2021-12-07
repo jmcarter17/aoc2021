@@ -1,6 +1,8 @@
 from utils import timer
+from statistics import median, mean
 
 
+@timer
 def get_data():
     with open("inputs/day7.txt") as f:
         return [int(val) for val in f.read().strip().split(",")]
@@ -8,8 +10,8 @@ def get_data():
 
 @timer
 def part1(data):
-    positions = range(min(data), max(data))
-    return min(sum((abs(x - pos)) for x in data) for pos in positions)
+    med = int(median(data))
+    return min(sum((abs(x - pos)) for x in data) for pos in range(med-1, med+2))
 
 
 def realcost(distance):
@@ -18,8 +20,8 @@ def realcost(distance):
 
 @timer
 def part2(data):
-    positions = range(min(data), max(data))
-    return min(sum(realcost(abs(x - pos)) for x in data) for pos in positions)
+    avg = int(mean(data))
+    return min(sum(realcost(abs(x - pos)) for x in data) for pos in range(avg-1, avg+2))
 
 
 @timer
