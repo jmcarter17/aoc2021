@@ -26,20 +26,20 @@ def compute_digits(segments):
         segments[9],
         None,
     ]
-    for seg in segments[3:6]:
-        if seg | res[1] == seg:
-            res[3] = seg
-        elif seg | (res[4] - res[1]) == seg:
-            res[5] = seg
-        else:
-            res[2] = seg
     for seg in segments[6:9]:
         if seg | res[4] == seg:
             res[9] = seg
-        elif seg | (res[4] - res[1]) == seg:
-            res[6] = seg
-        else:
+        elif seg | res[7] == seg:
             res[0] = seg
+        else:
+            res[6] = seg
+    for seg in segments[3:6]:
+        if seg | res[1] == seg:
+            res[3] = seg
+        elif seg | res[6] == res[6]:
+            res[5] = seg
+        else:
+            res[2] = seg
 
     return res
 
