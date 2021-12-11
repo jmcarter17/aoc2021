@@ -33,7 +33,7 @@ def compute_basin_size(data, idx):
 
 @timer
 def get_data():
-    with open("inputs/day9_test.txt") as f:
+    with open("inputs/day9.txt") as f:
         return np.array([[int(c) for c in row.strip()] for row in f])
 
 
