@@ -17,17 +17,13 @@ def get_data():
 
 
 def fold(points, fold_line):
-    new_points = set()
     axis, pos = fold_line
-
-    for a, b in points:
-        new_points.add(
-            (2 * pos - a, b) if axis == "x" and a > pos
-            else (a, 2 * pos - b) if axis == "y" and b > pos
-            else (a, b)
-        )
-
-    return new_points
+    return {
+        (2 * pos - a, b) if axis == "x" and a > pos
+        else (a, 2 * pos - b) if axis == "y" and b > pos
+        else (a, b)
+        for a, b in points
+    }
 
 
 @timer
