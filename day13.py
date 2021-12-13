@@ -18,12 +18,12 @@ def get_data():
 
 def fold(points, fold_line):
     new_points = set()
-    d, p = fold_line
+    axis, pos = fold_line
 
     for a, b in points:
         new_points.add(
-            (2 * p - a, b) if d == "x" and a > p
-            else (a, 2 * p - b) if d == "y" and b > p
+            (2 * pos - a, b) if axis == "x" and a > pos
+            else (a, 2 * pos - b) if axis == "y" and b > pos
             else (a, b)
         )
 
@@ -45,7 +45,7 @@ def display_points(points):
     answer = [[" " for _ in range(maxx)] for _ in range(maxy)]
 
     for x, y in points:
-        answer[y][x] = "#"
+        answer[y][x] = "█"
 
     return "\n".join(["".join(x) for x in answer])
 
