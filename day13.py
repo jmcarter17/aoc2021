@@ -1,5 +1,5 @@
+from functools import reduce
 from utils import timer
-import numpy as np
 
 
 @timer
@@ -18,18 +18,14 @@ def get_data():
 
 def fold(points, fold_line):
     new_points = set()
-    if fold_line[0] == "x":
-        x, y = fold_line[1], 2 ** 32
-    else:
-        x, y = 2 ** 32, fold_line[1]
+    d, p = fold_line
 
     for a, b in points:
-        if a < x and b < y:
-            new_points.add((a, b))
-        elif a > x:
-            new_points.add((2 * x - a, b))
-        elif b > y:
-            new_points.add((a, 2 * y - b))
+        new_points.add(
+            (2 * p - a, b) if d == "x" and a > p
+            else (a, 2 * p - b) if d == "y" and b > p
+            else (a, b)
+        )
 
     return new_points
 
@@ -38,33 +34,33 @@ def fold(points, fold_line):
 def part1(data):
     points, folds = data
     points = fold(points, folds[0])
-    print(points)
 
     return len(points)
 
 
-@timer
-def part2(data):
-    points, folds = data
-    for f in folds:
-        points = fold(points, f)
-
-    print(points)
-
+def display_points(points):
     maxx = max(x for x, _ in points) + 1
     maxy = max(y for _, y in points) + 1
 
-    answer = np.full((maxy, maxx), '.')
+    answer = [[" " for _ in range(maxx)] for _ in range(maxy)]
+
     for x, y in points:
-        answer[(y, x)] = '#'
+        answer[y][x] = "#"
 
     return "\n".join(["".join(x) for x in answer])
 
 
 @timer
+def part2(data):
+    points, folds = data
+    points = reduce(fold, folds, points)
+
+    return display_points(points)
+
+
+@timer
 def main():
     data = get_data()
-    print(data)
     print(part1(data))
     print(part2(data))
 
