@@ -27,8 +27,8 @@ def solve(polymer, rules, num_generations):
         )
 
     counter = Counter()
-    for pair in zip(polymer, polymer[1:]):
-        counter += generate("".join(pair), num_generations)
+    for a, b in zip(polymer, polymer[1:]):
+        counter += generate(a + b, num_generations)
 
     counter -= Counter(polymer[1:-1])
     most_commons = counter.most_common()
