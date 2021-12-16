@@ -1,5 +1,9 @@
-from math import prod
 from utils import timer
+from operator import gt, lt, eq, add, mul
+from functools import reduce
+
+
+FUNCTIONS = {0: add, 1: mul, 2: min, 3: max, 5: gt, 6: lt, 7: eq}
 
 
 def hex_to_bin(hexstr):
@@ -15,7 +19,7 @@ def get_data():
 
 
 def parse_header(header):
-    return {"ver": int(header[:3], 2), "tid": int(header[3:], 2), "sub": []}
+    return {"ver": int(header[:3], 2), "tid": int(header[3:], 2)}
 
 
 def parse_literal_value(raw):
@@ -77,30 +81,15 @@ def parse_package(raw, idx):
 
 
 def sum_versions(tree):
-    return tree["ver"] + sum((sum_versions(t) for t in tree["sub"]), 0)
+    return tree["ver"] + sum((sum_versions(t) for t in tree.get("sub", [])), 0)
 
 
 def eval_tree(tree):
     if "val" in tree:
         return tree["val"]
-    subtrees = (eval_tree(x) for x in tree["sub"])
-    if tree["tid"] == 0:
-        return sum(subtrees)
-    if tree["tid"] == 1:
-        return prod(subtrees)
-    if tree["tid"] == 2:
-        return min(subtrees)
-    if tree["tid"] == 3:
-        return max(subtrees)
-    if tree["tid"] == 5:
-        c1, c2 = subtrees
-        return c1 > c2
-    if tree["tid"] == 6:
-        c1, c2 = subtrees
-        return c1 < c2
-    if tree["tid"] == 7:
-        c1, c2 = subtrees
-        return c1 == c2
+
+    func = FUNCTIONS[tree["tid"]]
+    return reduce(func, (eval_tree(x) for x in tree["sub"]))
 
 
 @timer
