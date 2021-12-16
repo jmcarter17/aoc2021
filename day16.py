@@ -7,9 +7,7 @@ FUNCTIONS = {0: add, 1: mul, 2: min, 3: max, 5: gt, 6: lt, 7: eq}
 
 
 def hex_to_bin(hexstr):
-    return "".join(
-        ["0" * (4 - len(bin(int(x, 16))[2:])) + bin(int(x, 16))[2:] for x in hexstr]
-    )
+    return "".join(f"{int(x, 16):04b}" for x in hexstr)
 
 
 @timer
@@ -81,7 +79,7 @@ def parse_package(raw, idx):
 
 
 def sum_versions(tree):
-    return tree["ver"] + sum((sum_versions(t) for t in tree.get("sub", [])), 0)
+    return tree["ver"] + sum(sum_versions(t) for t in tree.get("sub", []))
 
 
 def eval_tree(tree):
@@ -89,7 +87,7 @@ def eval_tree(tree):
         return tree["val"]
 
     func = FUNCTIONS[tree["tid"]]
-    return reduce(func, (eval_tree(x) for x in tree["sub"]))
+    return int(reduce(func, (eval_tree(t) for t in tree["sub"])))
 
 
 @timer
