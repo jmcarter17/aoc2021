@@ -61,13 +61,13 @@ def part2(data):
 
     while game_states:
         next_states = Counter()
-        for state, rolls in product(game_states, possible_rolls):
-            new_state = state.update(rolls)
-            quantity = game_states[state] * possible_rolls[rolls]
-            if new_state.end_game(21):
-                finished_games[new_state] += quantity
+        for game, rolls in product(game_states, possible_rolls):
+            updated_game = game.update(rolls)
+            quantity = game_states[game] * possible_rolls[rolls]
+            if updated_game.end_game(21):
+                finished_games[updated_game] += quantity
             else:
-                next_states[new_state] += quantity
+                next_states[updated_game] += quantity
 
         game_states = next_states
 
