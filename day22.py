@@ -46,7 +46,6 @@ class Cuboid:
     def intersection(self, other: "Cuboid") -> Optional["Cuboid"]:
         if not self.intersects(other):
             return None
-
         return Cuboid(
             *(
                 (max(me[0], you[0]), min(me[1], you[1]))
@@ -55,26 +54,39 @@ class Cuboid:
         )
 
 
-def solve(data):
-    accumulator = []
-    for cmd, current in data:
-        for prev_cmd, previous in accumulator[:]:
-            intersection = previous.intersection(current)
-            if intersection:
-                accumulator.append((not prev_cmd, intersection))
-        if cmd:
-            accumulator.append((cmd, current))
+def sum_volumes(cuboids, acc=0) -> int:
+    if len(cuboids) == 0:
+        return acc
+    fst, *rest = cuboids
+    intersections = list(
+        {fst.intersection(other) for other in rest if fst.intersects(other)}
+    )
+    acc += fst.volume() - sum_volumes(intersections)
+    return sum_volumes(rest, acc)
 
-    return sum((cmd - (not cmd)) * cuboid.volume() for cmd, cuboid in accumulator)
+
+def solve(data, acc=0) -> int:
+    if len(data) == 0:
+        return acc
+
+    (cmd, fst), *rest = data
+    if not cmd:
+        return solve(rest, acc)
+
+    intersections = list(
+        {fst.intersection(other) for _, other in rest if fst.intersects(other)}
+    )
+    acc += fst.volume() - sum_volumes(intersections)
+    return solve(rest, acc)
 
 
 @timer
 def part1(data):
-    filtered_data = (
+    filtered_data = [
         row
         for row in data
         if all(low >= -50 and high <= 50 for low, high in row[1].coords())
-    )
+    ]
     return solve(filtered_data)
 
 
