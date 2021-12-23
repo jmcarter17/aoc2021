@@ -19,18 +19,15 @@ class GameState:
     player: int = 0
 
     def update(self, rolls: int):
-        updated_position = (self.positions[self.player] + rolls) % 10
-        updated_score = self.scores[self.player] + updated_position + 1
-        same_position = self.positions[1 - self.player]
-        same_score = self.scores[1 - self.player]
-        if self.player == 0:
-            positions = updated_position, same_position
-            scores = updated_score, same_score
-        else:
-            positions = same_position, updated_position
-            scores = same_score, updated_score
+        next_player = 1 - self.player
+        new_positions: [int] = [0, 0]
+        new_scores: [int] = [0, 0]
+        new_positions[self.player] = (self.positions[self.player] + rolls) % 10
+        new_positions[next_player] = self.positions[next_player]
+        new_scores[self.player] = self.scores[self.player] + new_positions[self.player] + 1
+        new_scores[next_player] = self.scores[next_player]
 
-        return GameState(positions, scores, self.numrolls + 3, 1 - self.player)
+        return GameState(tuple(new_positions), tuple(new_scores), self.numrolls + 3, next_player)
 
     def end_game(self, target):
         return any(x >= target for x in self.scores)
