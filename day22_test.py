@@ -1,6 +1,6 @@
 from itertools import combinations
 
-from day22 import Cuboid
+from day22 import Cuboid, parse_row, part1, part2
 
 
 def test_cuboid_volume():
@@ -45,16 +45,10 @@ def test_cuboid_intersection():
     assert cuboid1.intersection(cuboid4) is None
 
 
-def test_cuboid_subtract():
-    cuboid1 = Cuboid((0, 1), (0, 1), (0, 1))
-    cuboid2 = Cuboid((1, 1), (1, 1), (1, 1))
-    cuboids = {
-        Cuboid((0, 0), (0, 1), (0, 1)),
-        Cuboid((1, 1), (0, 0), (0, 1)),
-        Cuboid((1, 1), (1, 1), (0, 0)),
-    }
-    assert cuboid1.subtract(cuboid2) == cuboids
-    assert not any(c1.intersects(c2) for c1, c2 in combinations(cuboids, 2))
-    assert not any(c.intersects(cuboid2) for c in cuboids)
-    assert all(c.intersects(cuboid1) for c in cuboids)
+def test_part1_part2():
+    with open("inputs/day22_test.txt") as f:
+        data = [parse_row(row.strip()) for row in f]
+
+    assert part1(data) == 474140
+    assert part2(data) == 2758514936282235
 
