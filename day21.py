@@ -15,19 +15,16 @@ def get_data():
 class GameState:
     positions: tuple[int, int]
     scores: tuple[int, int] = (0, 0)
-    numrolls: int = 0
     player: int = 0
 
     def update(self, rolls: int):
         next_player = 1 - self.player
-        new_positions: [int] = [0, 0]
-        new_scores: [int] = [0, 0]
-        new_positions[self.player] = (self.positions[self.player] + rolls) % 10
-        new_positions[next_player] = self.positions[next_player]
-        new_scores[self.player] = self.scores[self.player] + new_positions[self.player] + 1
-        new_scores[next_player] = self.scores[next_player]
+        new_positions: [int] = list(self.positions)
+        new_scores: [int] = list(self.scores)
+        new_positions[self.player] = (new_positions[self.player] + rolls) % 10
+        new_scores[self.player] = new_scores[self.player] + new_positions[self.player] + 1
 
-        return GameState(tuple(new_positions), tuple(new_scores), self.numrolls + 3, next_player)
+        return GameState(tuple(new_positions), tuple(new_scores), next_player)
 
     def end_game(self, target):
         return any(x >= target for x in self.scores)
@@ -39,13 +36,14 @@ class GameState:
 @timer
 def part1(data):
     game = GameState(data)
+    numrolls = 0
     while not game.end_game(1000):
-        rollnum = game.numrolls
-        dicerolls = sum((x % 100) + 1 for x in range(rollnum, rollnum + 3))
+        dicerolls = sum((x % 100) + 1 for x in range(numrolls, numrolls + 3))
         game = game.update(dicerolls)
+        numrolls += 3
 
     loser_score = game.scores[game.player]
-    return loser_score * game.numrolls
+    return loser_score * numrolls
 
 
 @timer
