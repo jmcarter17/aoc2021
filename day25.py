@@ -4,59 +4,32 @@ from utils import timer
 @timer
 def get_data():
     with open("inputs/day25.txt") as f:
-        return [list(row.strip()) for row in f]
+        return [row.strip() for row in f]
 
 
-def step_east_row(row):
-    length = len(row)
-    new_row = row[:]
-    for i in range(length):
-        if row[i] == ">" and row[(i + 1) % length] == ".":
-            new_row[i] = "."
-            new_row[(i + 1) % length] = ">"
-
-    return new_row
+def replace(string, c):
+    old = c + "."
+    new = "." + c
+    if string[-1] + string[0] == old:
+        string = "_" + string[1:-1] + "x"
+    string = string.replace(old, new).replace("_", c).replace("x", ".")
+    return string
 
 
-def step_east(data):
-    new_data = [step_east_row(row) for row in data]
-    return new_data
-
-
-def step_south_col(col):
-    length = len(col)
-    new_col = list(col)
-    for i in range(length):
-        if col[i] == "v" and col[(i + 1) % length] == ".":
-            new_col[i] = "."
-            new_col[(i + 1) % length] = "v"
-
-    return new_col
-
-
-def step_south(data):
-    new_data = [step_south_col(col) for col in list(zip(*data))]
-    return [list(x) for x in zip(*new_data)]
-
-
-def step(data):
-    data = step_east(data)
-    data = step_south(data)
-
-    return data
+def step(cucumbers):
+    step_east = [replace(row, ">") for row in cucumbers]
+    return ["".join(x) for x in zip(*(replace("".join(col), "v") for col in zip(*step_east)))]
 
 
 @timer
-def part1(data):
-    new_data = step(data)
-    count = 1
-
-    while new_data != data:
-        data = new_data
-        new_data = step(data)
+def part1(cucumbers):
+    count = 0
+    while True:
         count += 1
-
-    return count
+        new_cucumbers = step(cucumbers)
+        if new_cucumbers == cucumbers:
+            return count
+        cucumbers = new_cucumbers
 
 
 @timer
